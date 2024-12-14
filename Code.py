@@ -69,7 +69,7 @@ def accept(s):
         if next_possible_states == []:
             break
         possible_states = next_possible_states
-        print(possible_states)
+        #print(possible_states)
     for state in possible_states:
         if state in accepting_states:
             return 'accepted'
