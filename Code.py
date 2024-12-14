@@ -53,23 +53,27 @@ def accept(s):
         c = char_list[0] 
         next_possible_states = []
         next_states = []
+        remove = False
         for i in range(len(possible_states)):
             if (possible_states[i], c) in transitions:
+                print(possible_states[i],c)
                 next_states = transitions[possible_states[i], c]
-                for i in range(len(next_states)):
-                    next_possible_states.append(next_states[i])
-                c = char_list.pop(0)
-
+                print(next_states)
+                for j in range(len(next_states)):
+                    next_possible_states.append(next_states[j])
+                    remove = True
             if (possible_states[i], '') in transitions:
+                print(possible_states[i],'')
                 next_states = transitions[possible_states[i], '']
-                for i in range(len(next_states)):
-                    next_possible_states.append(next_states[i])
+                for j in range(len(next_states)):
+                    next_possible_states.append(next_states[j])
         if c not in terminals:
             break
         if next_possible_states == []:
             break
+        if remove:
+            c = char_list.pop(0)
         possible_states = next_possible_states
-        #print(possible_states)
     for state in possible_states:
         if state in accepting_states:
             return 'accepted'
