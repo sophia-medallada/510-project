@@ -21,16 +21,18 @@ def accept(s):
                    ('PA', 'x'): ['A'],
                    ('PA', 'f'): ['FH'],
                    ('PA', 'o'): ['IH'],
-                   ('BH','m'): ['OH'],
-                   ('BH','n'): ['OH'],
-                   ('BA','m'): ['OA'],
-                   ('BA','n'): ['OA'],
-                   ('OH','r'): ['A','H'],
-                   ('OH',''): ['FH','IA'],
-                   ('OH','o'): ['IA'],
-                   ('OA','r'): ['A','H'],
-                   ('OA',''): ['FA','IH'],
-                   ('OA','o'): ['IH'],
+                   ('BH','m'): ['MH'],
+                   ('BH','n'): ['NH'],
+                   ('BA','m'): ['MA'],
+                   ('BA','n'): ['NA'],
+                   ('NH','r'): ['H','A'],
+                   ('NH','o'): ['IA'],
+                   ('NH',''): ['FH'],
+                   ('MH', ''): ['FH','IA'],
+                   ('NA','r'): ['H','A'],
+                   ('NA','o'): ['IH'],
+                   ('NA',''): ['FA'],
+                   ('MA',''): ['FA','IH'],
                    ('FH',''): ['IH'],
                    ('FH','s'): ['BH'],
                    ('FA',''): ['IA'],
@@ -39,16 +41,15 @@ def accept(s):
                    ('RH','d'): ['H'],
                    ('RA','g'): ['IA'],
                    ('RA','d'): ['A'],
-                   ('IH',''): ['IA'],
                    ('IH','i'): ['H','A'],
-                   ('IA',''): ['IH'],
-                   ('IA','i'): ['A','H'],}
+                   ('IA','i'): ['H','A'],}
 
     state = 'J'
-    accepting_states = ['OH', 'OA']  
+    accepting_states = ['MH', 'NH', 'MA', 'NA']  
     possible_states = [state]
     char_list = list(s)
     terminals = ['h','a','s','x','y','m','n','r','o','t','g','d','d','i']
+    count = 0
     while char_list:
         c = char_list[0] 
         next_possible_states = []
@@ -56,28 +57,24 @@ def accept(s):
         remove = False
         for i in range(len(possible_states)):
             if (possible_states[i], c) in transitions:
-                print(possible_states[i],c)
                 next_states = transitions[possible_states[i], c]
-                print(next_states)
                 for j in range(len(next_states)):
                     next_possible_states.append(next_states[j])
-                    remove = True
-            if (possible_states[i], '') in transitions:
-                print(possible_states[i],'')
+                remove = True
+            elif (possible_states[i], '') in transitions:
                 next_states = transitions[possible_states[i], '']
                 for j in range(len(next_states)):
                     next_possible_states.append(next_states[j])
         if c not in terminals:
-            break
+            'rejected'
         if next_possible_states == []:
-            break
+            return 'rejected'
         if remove:
             c = char_list.pop(0)
         possible_states = next_possible_states
     for state in possible_states:
         if state in accepting_states:
             return 'accepted'
-
     return 'rejected'
 
 def main():
